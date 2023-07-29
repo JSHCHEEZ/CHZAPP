@@ -3,7 +3,7 @@
 <%@ include file="layout/header.jsp" %>
 
 <div class="container">
-TEST
+CHZ
 </div>
 
 <%@ include file="layout/footer.jsp" %>

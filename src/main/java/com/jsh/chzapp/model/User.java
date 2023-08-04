@@ -27,46 +27,40 @@ import lombok.Setter;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int USE_Idx;
+	private int idx;
 	
 	@Column(nullable = false, length = 30)
-	private String USE_Id;
+	private String id;
 	
 	@Column(nullable = false, length = 100)
-	private String USE_Password;
+	private String password;
 	
 	@Column(nullable = false, length = 30)
-	private String USE_Name;
+	private String name;
 	
 	@Column(nullable = false, length = 50)
-	private String USE_Email;
+	private String email;
 	
-	private int USE_BirthYear;
+	private int birthYear;
 	
-	private int USE_BirthMonth;
+	private int birthMonth;
 	
-	private int USE_BirthDay;
+	private int birthDay;
 	
-	private String USE_Gender;
+	private String gender;
 	
-	private String USE_Address1;
+	private String address1;
 	
-	private String USE_Address2;
+	private String address2;
 	
-	private String USE_AddressDetail;
+	private String addressDetail;
 	
 	@Enumerated(EnumType.STRING)
-	private RoleType USE_ROLE;
+	private RoleType role;
 	
-	private boolean USE_IsValid;
+	private boolean balid;
 	
 	@CreationTimestamp
-	private Timestamp USE_CreateDate;
-	
-	private Timestamp USE_UpdateDate;
-	
-	@ColumnDefault("0")
-	private int UPT_Idx;
-	
-	private String DEL_LOG;
+	private Timestamp createDate;
+
 }

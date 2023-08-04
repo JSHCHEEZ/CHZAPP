@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,32 +31,26 @@ import lombok.Setter;
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int POS_Idx;
-	
+	private int idx;
+
 	@Lob
-	private String POS_Content;
-	
+	private String content;
+
 	@ColumnDefault("0")
-	private int POS_Like;
-	
+	private int likeCount;
+
 	@ColumnDefault("0")
-	private int POS_Dislike;
-	
-	private String POS_Tag;
-	
-	private boolean POS_IsValid;
-	
+	private int dislikeCount;
+
+	private String hashtag;
+
+	@ColumnDefault("true")
+	private boolean valid;
+
 	@CreationTimestamp
-	private Timestamp POS_CreateDate;
-	
-	private Timestamp POS_UpdateDate;
-	
-	@ColumnDefault("0")
-	private int UPT_Idx;
-	
-	private String DEL_LOG;
-	
+	private Timestamp createDate;
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "USE_Idx")
+	@JoinColumn(name = "userIdx")
 	private User user;
 }

@@ -29,36 +29,29 @@ public class PostReply {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int POR_Idx;
+	private int idx;
 	
 	@ColumnDefault("0")
-	private int POR_PIdx;
+	private int parentIdx;
 	
 	@Lob
-	private String POR_Content;
+	private String content;
 	
 	@ColumnDefault("0")
-	private int POR_Like;
+	private int likeCount;
 	
 	@ColumnDefault("0")
-	private int POR_Dislike;
+	private int dislikeCount;
 	
 	@CreationTimestamp
-	private Timestamp POR_CreateDate;
-	
-	private Timestamp POR_UpdateDate;
-	
-	@ColumnDefault("0")
-	private int UPT_Idx;
-	
-	private String DEL_LOG;
+	private Timestamp createDate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "USE_Idx")
+	@JoinColumn(name = "userIdx")
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "POS_Idx")
+	@JoinColumn(name = "postIdx")
 	private Post post;
 	
 }

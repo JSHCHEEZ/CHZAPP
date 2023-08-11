@@ -31,7 +31,7 @@ import lombok.Setter;
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idx;
+	private int id;
 
 	@Lob
 	private String content;
@@ -51,6 +51,6 @@ public class Post {
 	private Timestamp createDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "userIdx")
+	@JoinColumn(name = "userId")
 	private User user;
 }

@@ -29,10 +29,10 @@ public class PostReply {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idx;
+	private int id;
 	
 	@ColumnDefault("0")
-	private int parentIdx;
+	private int parentId;
 	
 	@Lob
 	private String content;
@@ -47,11 +47,11 @@ public class PostReply {
 	private Timestamp createDate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "userIdx")
+	@JoinColumn(name = "userId")
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "postIdx")
+	@JoinColumn(name = "postId")
 	private Post post;
 	
 }

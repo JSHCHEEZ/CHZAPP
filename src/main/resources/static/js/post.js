@@ -7,8 +7,7 @@ let index = {
 	
 	save : function(){
 		let data = {
-			content: $("#content").val(),
-			hashtag: $("#hashtag").val()
+			content: $("#content").val()
 		};
 
 		$.ajax({

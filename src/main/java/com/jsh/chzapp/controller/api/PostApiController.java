@@ -18,10 +18,7 @@ public class PostApiController {
 	
 	@PostMapping("/api/post")
 	public ResponseDTO<Integer> save(@RequestBody Post post) { //, @AuthenticationPrincipal PrincipalDetail principal
-		System.out.println("@@@@@@@@@@@@@@@@@@@" + post.getContent());
-		System.out.println("@@@@@@@@@@@@@@@@@@@" + post.getHashtag());
 		postService.createPost(post);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 	}
-	
 }

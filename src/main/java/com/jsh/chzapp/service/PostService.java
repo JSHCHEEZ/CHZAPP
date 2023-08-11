@@ -22,6 +22,12 @@ public class PostService {
 		return postRepository.findAll(pageable);
 	}
 	
+	@Transactional(readOnly = true)
+	public Post selectById(int id){
+		return postRepository.findById(id)
+				.orElseThrow(()-> {return new IllegalArgumentException("글 상세보기 실패: 인덱스를 찾을 수 없습니다. id : " + id);});
+	}
+	
 	@Transactional
 	public void createPost(Post post) {
 		postRepository.save(post);

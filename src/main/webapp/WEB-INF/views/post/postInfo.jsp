@@ -4,22 +4,25 @@
 
 <div class="container">
   <div class="container">
-    <h1>POST 작성</h1>
     <form>
-      <div class="mb-3">
-        <label for="content" class="form-label">콘텐트</label>
-        <input type="text" class="form-control" id="content" placeholder="...">
-      </div>
-      <div class="mb-3">
-        <label for="hashtag" class="form-label">태그입력</label>
-        <input type="text" class="form-control" id="hashtag" placeholder="###">
-      </div>
+    	<textarea id="content" class="content-textarea" placeholder="일상을 공유하세요. :)">${post.content}</textarea>
+	    <div id="previewContainer"></div>
+   	    <label class="file-input-container">
+        	<input type="file" class="file-input" id="uploadFile" name="files[]" multiple="multiple" accept="image/*">
+	    </label>
+        <button id="btn-save" class="img-button submit-button"></button>
     </form>
-    
-    <button id="btn-save" class="btn btn-primary">작성</button>
   </div>
 </div>
 
-<script src="/js/post.js"></script>
 
-<%@ include file="../layout/footer.jsp" %>
+<link href="<c:url value='/css/chzapp.css' />" rel="stylesheet">
+<script src="/js/post.js"></script>
+<script>
+	var efiles = "${post.efiles}";
+	
+	efiles.forEach(function(efile, index) {
+	  alert("test")
+	});
+
+</script>

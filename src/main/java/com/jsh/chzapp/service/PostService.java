@@ -19,7 +19,7 @@ public class PostService {
 	
 	@Transactional(readOnly = true)
 	public Page<Post> selectAll(Pageable pageable){
-		return postRepository.findAll(pageable);
+		return postRepository.findPostALLByValid(pageable);
 	}
 	
 	@Transactional(readOnly = true)
@@ -29,8 +29,14 @@ public class PostService {
 	}
 	
 	@Transactional
-	public void createPost(Post post) {
-		postRepository.save(post);
+	public Post createPost(Post post) {
+		return postRepository.save(post);
 	}
+	
+	@Transactional
+    public void updatePostValid(int id, boolean valid) {
+        postRepository.updateValidById(id, valid);
+    }
+
 	
 }

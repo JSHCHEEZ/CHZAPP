@@ -2,64 +2,126 @@
 
 <%@ include file="../layout/header.jsp" %>
 
-<div class="container">
-  <!-- 콘텐츠 목록 -->
-  <div class="container mt-4">
-    <h1>POST</h1>
-    
-    <form>
-      <div class="mb-3" style="">
-        <label for="content" class="form-label">콘텐트</label>
-        <input type="text" class="form-control" id="content" placeholder="..." style="">
-            <button id="btn-save" class="btn btn-primary" style="float: right">POST</button>
-      </div>
-    </form>
-    
-    <div>
-     <c:forEach var="post" items="${posts.content}">
-     	<div class="card border-secondary mb-3" style="max-width: 20rem;">
-		  <div class="card-header">Username</div>
-		  <div class="card-body">
-		    <p class="card-text">${post.content}</p>
-		  </div>
-		</div>
-     </c:forEach>
-	</div>
+<body class="content-body">
+	<div class="container">
+    	<h1>POST</h1>
+	    <form>
+	    	<textarea id="content" class="content-textarea" placeholder="일상을 공유하세요. :)"></textarea>
+		    <div id="previewContainer"></div>
+	   	    <label class="file-input-container">
+	        	<input type="file" class="file-input" id="filesInput" name="files[]" multiple="multiple" accept="image/*">
+		    </label>
+		    <div class="btn-right-container">
+		    	<button id="btn-save">공유하기</button>
+		    </div>
+	    </form>
+	    
+	    <hr/>
 
-	<ul class="pagination justify-content-center">
-		<c:choose>
-		<c:when test="${posts.first}">
-		  	<li class="page-item disabled"><a class="page-link" href="?page=${posts.number-1}">Previous</a></li>
-		</c:when>
-		<c:otherwise>
-			<li class="page-item"><a class="page-link" href="?page=${posts.number-1}">Previous</a></li>
-		</c:otherwise>
-		</c:choose>
-		
-		<c:forEach var="page" begin="1" end="${posts.totalPages}">
+	    <div>
+	     <c:forEach var="post" items="${posts.content}">
+		 	<div class="timeline">
+	        	<div class="timeline-item">
+		            <div class="timeline-content timeline-hoverable" onclick="directView(${post.id})">
+		                <p>${post.content}</p>
+		                <c:forEach var="efile" items="${post.efiles}">
+		                	<img src="image/${efile.efileName}" class="preview-image">
+		                </c:forEach>
+		                
+		            </div>
+		            <div class="btn-right-container">
+		                	<button class="btn btn-success btn-post" onclick="updatePost(${post.id})">수정</button>
+		                	<button class="btn btn-danger btn-post" onclick="deletePost(${post.id})">삭제</button>
+		                </div>
+		            <span class="timeline-date">${post.createDate}</span>
+		        </div>
+	    	</div>
+	     </c:forEach>
+		</div>
+
+		<!-- The Modal -->
+		<div id="chzModal" class="modal">
+		    <div class="modal-content animate-top">
+		        <div class="modal-header">
+		            <h5 class="modal-title">Modal title</h5>
+		            <button type="button" class="close">
+		                <span aria-hidden="true">x</span>
+		            </button>
+		        </div>
+		        <div class="modal-body">
+		            <p>Woohoo, you're reading this text in a modal!</p>
+		            <p>Modal body content goes here...</p>
+		        </div>
+		        <div class="modal-footer">
+				    <button type="button" id="yesButton" class="btn btn-primary">yes</button>
+			        <button type="button" id="noButton" class="btn btn-secondary" data-bs-dismiss="modal">no</button>
+		        </div>
+		    </div>
+		</div>
+
+		<ul class="pagination">
 			<c:choose>
-			<c:when test="${posts.number == page-1}">
-			  	<li class="page-item disabled"><a class="page-link" href="?page=${page-1}">${page}</a></li>
+			<c:when test="${posts.first}">
+			  	<li class="page-item disabled"><a class="page-link" href="?page=${posts.number-1}">Previous</a></li>
 			</c:when>
 			<c:otherwise>
-				<li class="page-item"><a class="page-link" href="?page=${page-1}">${page}</a></li>
+				<li class="page-item"><a class="page-link" href="?page=${posts.number-1}">Previous</a></li>
 			</c:otherwise>
 			</c:choose>
-      	</c:forEach>
-		
-		<c:choose>
-		<c:when test="${posts.last}">
-		  	<li class="page-item disabled"><a class="page-link" href="?page=${posts.number+1}">Next</a></li>
-		</c:when>
-		<c:otherwise>
-			<li class="page-item"><a class="page-link" href="?page=${posts.number+1}">Next</a></li>
-		</c:otherwise>
-		</c:choose>
-	</ul>
+			
+			<c:forEach var="page" begin="1" end="${posts.totalPages}">
+				<c:choose>
+				<c:when test="${posts.number == page-1}">
+				  	<li class="page-item disabled"><a class="page-link" href="?page=${page-1}">${page}</a></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="?page=${page-1}">${page}</a></li>
+				</c:otherwise>
+				</c:choose>
+	      	</c:forEach>
+			
+			<c:choose>
+			<c:when test="${posts.last}">
+			  	<li class="page-item disabled"><a class="page-link" href="?page=${posts.number+1}">Next</a></li>
+			</c:when>
+			<c:otherwise>
+				<li class="page-item"><a class="page-link" href="?page=${posts.number+1}">Next</a></li>
+			</c:otherwise>
+			</c:choose>
+		</ul>
   </div>
+</body>
 
-</div>
+<link href="<c:url value='/css/chzapp.css' />" rel="stylesheet">
 
 <script src="/js/post.js"></script>
 
-<%@ include file="../layout/footer.jsp" %>
+<script>
+const filesInput = document.getElementById('filesInput');
+const previewContainer = document.getElementById('previewContainer');
+
+filesInput.addEventListener('change', handleFileSelect);
+
+function handleFileSelect(event) {
+    previewContainer.innerHTML = '';
+
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('preview-image');
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+}
+</script>

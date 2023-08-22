@@ -29,9 +29,11 @@ public class PostController {
 		return "post/postView";
 	}
 	
-	@GetMapping({"/post/form", "/post/form/{id}"})
-	public String postModify() {
+	@GetMapping("/post/form/{id}")
+	public String postModify(@PathVariable int id, Model model) {
+		model.addAttribute("post", postService.selectById(id));
 		return "post/postInfo";
 	}
+
 	
 }

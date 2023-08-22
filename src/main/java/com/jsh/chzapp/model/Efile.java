@@ -1,15 +1,12 @@
 package com.jsh.chzapp.model;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,8 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,40 +28,34 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Post {
+public class Efile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Lob
-	private String content;
-
-	@ColumnDefault("0")
-	private int likeCount;
-
-	@ColumnDefault("0")
-	private int dislikeCount;
-
-	private String hashtag;
+	private String efileName;
+	
+	private String efileContentType;
+	
+	private String efileOriginalName;
+	
+	private String efileExtension;
+	
+	private String efileUrl;
+	
+	private int efileSize;
 
 	@Column(columnDefinition = "boolean default true")
 	private boolean valid = true;
 
 	@CreationTimestamp
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp createDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userId")
 	private User user;
 	
-	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계 주인이 아님 -> DB에 FK를 만들지 않는다.
-	@JsonIgnoreProperties({"post"})
-	@OrderBy("id desc")
-	private List<Efile> efiles;
-	
-	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계 주인이 아님 -> DB에 FK를 만들지 않는다.
-	@JsonIgnoreProperties({"post"})
-	@OrderBy("id desc")
-	private List<PostReply> replys;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "postId")
+	private Post post;
 }

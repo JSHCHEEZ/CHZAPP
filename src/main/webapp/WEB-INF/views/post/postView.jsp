@@ -20,7 +20,9 @@
 	<form>
 		<input type="hidden" id="postId" value="${post.id}"> 
 		<textarea id="reply-content" class="reply-textarea" placeholder="댓글을 작성하세요"></textarea>
-		<button id="btn-reply" class="img-button submit-button"></button>
+		<div class="btn-right-container">
+			<button id="btn-reply">댓글작성</button>
+		</div>
 	</form>
 	<c:forEach var="reply" items="${post.replys}">
    		<div class="reply-list">

@@ -43,18 +43,17 @@
 		<div id="chzModal" class="modal">
 		    <div class="modal-content animate-top">
 		        <div class="modal-header">
-		            <h5 class="modal-title">Modal title</h5>
+		            <h5 class="modal-title">삭제</h5>
 		            <button type="button" class="close">
 		                <span aria-hidden="true">x</span>
 		            </button>
 		        </div>
 		        <div class="modal-body">
-		            <p>Woohoo, you're reading this text in a modal!</p>
-		            <p>Modal body content goes here...</p>
+		            <p>삭제하시겠습니까?</p>
 		        </div>
 		        <div class="modal-footer">
-				    <button type="button" id="yesButton" class="btn btn-primary">yes</button>
-			        <button type="button" id="noButton" class="btn btn-secondary" data-bs-dismiss="modal">no</button>
+				    <button type="button" id="yesButton" class="btn btn-primary">YES</button>
+			        <button type="button" id="noButton" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
 		        </div>
 		    </div>
 		</div>
@@ -99,29 +98,60 @@
 <script>
 const filesInput = document.getElementById('filesInput');
 const previewContainer = document.getElementById('previewContainer');
+const dataTransfer = new DataTransfer();
 
-filesInput.addEventListener('change', handleFileSelect);
-
-function handleFileSelect(event) {
-    previewContainer.innerHTML = '';
-
-    const files = event.target.files;
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+$('#filesInput').change(function(event){
+	const fileArr = filesInput.files;
+	
+	if(fileArr != null && fileArr.length > 0){
+         for(var i=0; i<fileArr.length; i++){
+             dataTransfer.items.add(fileArr[i])
+         }
+         filesInput.files = dataTransfer.files;         
+     }
+	
+	for (let i = 0; i < fileArr.length; i++) {
+        const file = fileArr[i];
 
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
 
             reader.onload = (e) => {
+                const imgSpan = document.createElement('span');
+                const buttonX = document.createElement('button');
                 const img = document.createElement('img');
+                
                 img.src = e.target.result;
-                img.classList.add('preview-image');
-                previewContainer.appendChild(img);
+                img.className = 'preview-image';
+                
+                buttonX.type = 'button';
+                buttonX.innerHTML = 'X';
+                buttonX.className = 'btnX';
+                buttonX.addEventListener("click",() => {
+                	// 코드 정리 필요
+	               	const files = Array.from(filesInput.files)
+                	
+	               	for(let k=0; k<dataTransfer.items.length; k++){
+
+	               		if(dataTransfer.items[k].getAsFile() === file){
+	               			alert(k);
+	               			dataTransfer.items.remove(k);
+	               			break;
+	               		}	
+	               	}
+                	
+               	  	filesInput.files = dataTransfer.files;
+               	  	
+               		imgSpan.remove();
+                })
+                
+                imgSpan.appendChild(img);
+                imgSpan.appendChild(buttonX);
+                previewContainer.appendChild(imgSpan);
             };
 
             reader.readAsDataURL(file);
         }
-    }
-}
+	}
+});
 </script>

@@ -7,10 +7,10 @@
     	<h1>POST</h1>
 	    <form>
 	    	<textarea id="content" class="content-textarea" placeholder="일상을 공유하세요. :)"></textarea>
-		    <div id="previewContainer"></div>
 	   	    <label class="file-input-container">
 	        	<input type="file" class="file-input" id="filesInput" name="files[]" multiple="multiple" accept="image/*">
 		    </label>
+		    <span id="previewContainer"></span>
 		    <div class="btn-right-container">
 		    	<button id="btn-save">공유하기</button>
 		    </div>
@@ -25,13 +25,13 @@
 		            <div class="timeline-content timeline-hoverable" onclick="directView(${post.id})">
 		                <p>${post.content}</p>
 		                <c:forEach var="efile" items="${post.efiles}">
-		                	<img src="image/${efile.efileName}" class="preview-image">
+		                	<img src="/image/${efile.efileName}" class="preview-image">
 		                </c:forEach>
 		                
 		            </div>
 		            <div class="btn-right-container">
 		                	<button class="btn btn-success btn-post" onclick="updatePost(${post.id})">수정</button>
-		                	<button class="btn btn-danger btn-post" onclick="deletePost(${post.id})">삭제</button>
+		                	<button class="btn btn-danger btn-post" onclick="deletePost(this, ${post.id})">삭제</button>
 		                </div>
 		            <span class="timeline-date">${post.createDate}</span>
 		        </div>
@@ -39,7 +39,7 @@
 	     </c:forEach>
 		</div>
 
-		<!-- The Modal -->
+		<!-- Modal -->
 		<div id="chzModal" class="modal">
 		    <div class="modal-content animate-top">
 		        <div class="modal-header">
@@ -95,63 +95,3 @@
 
 <script src="/js/post.js"></script>
 
-<script>
-const filesInput = document.getElementById('filesInput');
-const previewContainer = document.getElementById('previewContainer');
-const dataTransfer = new DataTransfer();
-
-$('#filesInput').change(function(event){
-	const fileArr = filesInput.files;
-	
-	if(fileArr != null && fileArr.length > 0){
-         for(var i=0; i<fileArr.length; i++){
-             dataTransfer.items.add(fileArr[i])
-         }
-         filesInput.files = dataTransfer.files;         
-     }
-	
-	for (let i = 0; i < fileArr.length; i++) {
-        const file = fileArr[i];
-
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                const imgSpan = document.createElement('span');
-                const buttonX = document.createElement('button');
-                const img = document.createElement('img');
-                
-                img.src = e.target.result;
-                img.className = 'preview-image';
-                
-                buttonX.type = 'button';
-                buttonX.innerHTML = 'X';
-                buttonX.className = 'btnX';
-                buttonX.addEventListener("click",() => {
-                	// 코드 정리 필요
-	               	const files = Array.from(filesInput.files)
-                	
-	               	for(let k=0; k<dataTransfer.items.length; k++){
-
-	               		if(dataTransfer.items[k].getAsFile() === file){
-	               			alert(k);
-	               			dataTransfer.items.remove(k);
-	               			break;
-	               		}	
-	               	}
-                	
-               	  	filesInput.files = dataTransfer.files;
-               	  	
-               		imgSpan.remove();
-                })
-                
-                imgSpan.appendChild(img);
-                imgSpan.appendChild(buttonX);
-                previewContainer.appendChild(imgSpan);
-            };
-
-            reader.readAsDataURL(file);
-        }
-	}
-});
-</script>

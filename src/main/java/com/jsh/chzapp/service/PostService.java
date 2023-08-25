@@ -34,8 +34,17 @@ public class PostService {
 	}
 	
 	@Transactional
-    public void updatePostValid(int id, boolean valid) {
-        postRepository.updateValidById(id, valid);
+	public Post updatePost(int id, Post requestPost) {
+		Post post = postRepository.findById(id)
+				.orElseThrow(()-> {return new IllegalArgumentException("글 찾기 실패: 아이디를 찾을 수 없습니다 id : " + id);}); //영속화 완료
+		
+		post.setContent(requestPost.getContent());
+		return post;
+	}
+	
+	@Transactional
+    public void updatePostValid(int id) {
+        postRepository.updateValidById(id, false);
     }
 
 	

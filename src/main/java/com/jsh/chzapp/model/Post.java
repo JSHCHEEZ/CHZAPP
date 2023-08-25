@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -60,11 +61,13 @@ public class Post {
 	@JoinColumn(name = "userId")
 	private User user;
 	
+	@Where( clause = "valid = true")
 	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계 주인이 아님 -> DB에 FK를 만들지 않는다.
 	@JsonIgnoreProperties({"post"})
 	@OrderBy("id desc")
 	private List<Efile> efiles;
 	
+	@Where( clause = "valid = true")
 	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계 주인이 아님 -> DB에 FK를 만들지 않는다.
 	@JsonIgnoreProperties({"post"})
 	@OrderBy("id desc")

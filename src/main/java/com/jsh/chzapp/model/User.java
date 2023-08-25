@@ -61,7 +61,8 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
 	
-	private boolean balid;
+	@Column(columnDefinition = "boolean default true")
+	private boolean valid = true;
 	
 	@CreationTimestamp
 	private Timestamp createDate;

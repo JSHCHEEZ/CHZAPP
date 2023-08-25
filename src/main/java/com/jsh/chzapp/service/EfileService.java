@@ -37,7 +37,7 @@ public class EfileService {
         // 모든 chunk 합치기 완료
         if (currentChunk == totalChunks - 1) {
         	//파일 저장
-        	File combineFile = new File(UPLOAD_DIR + UUID.randomUUID().toString() + "." + originalFileName.substring(originalFileName.lastIndexOf('.')));
+        	File combineFile = new File(UPLOAD_DIR + UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.')));
 
             try (FileOutputStream fos = new FileOutputStream(combineFile, true)) {
                 for (int i = 0; i < totalChunks; i++) {
@@ -104,5 +104,10 @@ public class EfileService {
         }
 		
 	}
+	
+	@Transactional
+    public void updateEfileValid(int id, boolean valid) {
+		efileRepository.updateValidById(id, valid);
+    }
 	
 }

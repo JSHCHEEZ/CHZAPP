@@ -15,12 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jsh.chzapp.dto.ResponseDTO;
 import com.jsh.chzapp.service.EfileService;
+
+import jakarta.websocket.server.PathParam;
 
 @RestController
 public class EfileApiController {
@@ -35,11 +38,19 @@ public class EfileApiController {
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 	}
+	
+	@PutMapping("/api/file/delete/{id}")
+	public ResponseDTO<Integer> deleteFile(@PathVariable int id){
+		
+		efileService.updateEfileValid(id, false);
+		
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+	}
 
 	@GetMapping("/image/{imageName}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
 		String path = "D:\\WorkSpace\\FileServer\\Image\\";
-		
+
         Resource resource = new FileSystemResource(path + imageName);
         
         if(!resource.exists())

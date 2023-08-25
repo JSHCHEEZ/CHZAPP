@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.jsh.chzapp.dto.ResponseDTO;
 import com.jsh.chzapp.model.Post;
+import com.jsh.chzapp.repository.PostRepository;
 import com.jsh.chzapp.service.EfileService;
 import com.jsh.chzapp.service.PostService;
 
@@ -26,15 +27,14 @@ public class PostApiController {
 	@Autowired
 	private EfileService efileService;
 	
-	@PostMapping("/api/post2")
+	@PostMapping("/api/post")
 	public ResponseDTO<Post> uploadContent(@RequestBody Post post){
 		Post newPost = postService.createPost(post);
-			
 			
 		return new ResponseDTO<Post>(HttpStatus.OK.value(), newPost);
 	}
 
-	@PostMapping("/api/post")
+	@PostMapping("/api/fileUpload")
 	public ResponseDTO<Integer> uploadChunk(
             @RequestParam("fileChunk") MultipartFile fileChunk,
             @RequestParam("totalChunks") int totalChunks,
@@ -53,9 +53,16 @@ public class PostApiController {
         }
     }
 	
+	@PutMapping("/api/post/{id}")
+	public ResponseDTO<Post> update(@PathVariable int id, @RequestBody Post post){
+		Post editPost = postService.updatePost(id, post);
+		
+		return new ResponseDTO<Post>(HttpStatus.OK.value(), editPost);
+	}
+	
 	@PutMapping("/api/post/delete/{id}")
 	public ResponseDTO<Integer> delete(@PathVariable int id){
-		postService.updatePostValid(id, false);
+		postService.updatePostValid(id);
 		
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 	}
